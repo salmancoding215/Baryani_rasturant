@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl" class="lang-ur">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Obaid Restaurant | عبید ریسٹورنٹ - پریمیم ذائقہ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400..700&family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600&family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink-black: #0c0804;
+    --ink-black-2: #140d07;
+    --card-maroon: #1f0f09;
+    --ivory: #fdf9f0;
+    --ivory-dim: #d4c8ae;
+    --saffron: #f1a829;
+    --saffron-bright: #ffc55a;
+    --deggi: #d92b2b;
+    --deggi-dark: #ab1f1f;
+    --glow-shadow: rgba(241, 168, 41, 0.25);
+    --line: rgba(241, 168, 41, 0.15);
+  }
+  html.lang-ur { --font-display: 'Noto Nastaliq Urdu', serif; --font-body: 'Noto Nastaliq Urdu', serif; }
+  html.lang-en { --font-display: 'Poppins', sans-serif; --font-body: 'Inter', sans-serif; }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--ink-black);
+    color: var(--ivory);
+    font-family: var(--font-body);
+    line-height: 2;
+    overflow-x: hidden;
+  }
+  html.lang-en body { line-height: 1.7; }
+  .num, .price, input, textarea, .plate-toggle span, .qty-btn, .qty-num, .val { font-family: 'Rubik', sans-serif; }
+  img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  a { color: inherit; text-decoration: none; }
+
+  body::before {
+    content: ""; position: fixed; inset: 0;
+    background-image:
+      radial-gradient(circle at 15% 20%, rgba(241,168,41,0.07), transparent 45%),
+      radial-gradient(circle at 85% 75%, rgba(217,43,43,0.09), transparent 45%);
+    pointer-events: none; z-index: 0;
+  }
+
+  /* ---------- Header ---------- */
+  header {
+    position: fixed; top: 0; right: 0; left: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 22px 6%;
+    background: linear-gradient(180deg, rgba(12,8,4,0.98), rgba(12,8,4,0));
+    transition: all 0.4s ease;
+  }
+  header.scrolled { 
+    background: rgba(12,8,4,0.96); 
+    backdrop-filter: blur(15px); 
+    box-shadow: 0 4px 30px rgba(0,0,0,0.6); 
+    padding: 14px 6%; 
+    border-bottom: 1px solid var(--line);
+  }
+  .brand { display: flex; align-items: center; gap: 12px; cursor: pointer; }
+  .brand svg { width: 44px; height: 44px; flex-shrink: 0; transform: rotate(-5deg); transition: transform 0.3s; }
+  .brand:hover svg { transform: rotate(5deg) scale(1.05); }
+  .brand-text { font-family: var(--font-display); font-size: 1.7rem; font-weight: 700; color: var(--saffron-bright); text-shadow: 0 2px 10px rgba(241,168,41,0.3); }
+  
+  .header-right { display: flex; align-items: center; gap: 30px; }
+  nav a { font-size: 1.05rem; color: var(--ivory-dim); position: relative; padding: 4px 0; transition: color 0.3s; }
+  nav a::after { content: ""; position: absolute; bottom: 0; left: 0; width: 0; height: 2px; background: var(--saffron); transition: width 0.3s ease; }
+  nav a:hover { color: var(--saffron-bright); }
+  nav a:hover::after { width: 100%; }
+  nav a + a { margin-inline-start: 26px; }
+  
+  .lang-switch {
+    display: flex; border: 1px solid var(--saffron); border-radius: 24px; overflow: hidden;
+    font-size: 0.85rem; box-shadow: 0 0 10px rgba(241,168,41,0.1);
+  }
+  .lang-switch button {
+    background: transparent; border: none; color: var(--ivory-dim); padding: 6px 18px; cursor: pointer; transition: .3s; font-weight: 500;
+  }
+  .lang-switch button.active { background: var(--saffron); color: var(--ink-black); font-weight: 700; }
+
+  /* ---------- Hero ---------- */
+  .hero { position: relative; height: 100svh; min-height: 650px; display: flex; align-items: flex-end; overflow: hidden; background: #000; }
+  .hero-slide { position: absolute; inset: 0; opacity: 0; transform: scale(1.06); transition: opacity 1.5s ease, transform 1.5s ease; }
+  .hero-slide.active { opacity: 1; transform: scale(1); }
+  .hero::after {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(0deg, rgba(12,8,4,1) 10%, rgba(12,8,4,0.4) 50%, rgba(12,8,4,0.7) 100%);
+    z-index: 1;
+  }
+  .hero-content { position: relative; z-index: 2; padding: 0 6% 12%; width: 100%; text-align: center; }
+  .hero-eyebrow { color: var(--saffron); letter-spacing: 3px; font-size: 0.95rem; text-transform: uppercase; margin-bottom: 18px; text-shadow: 0 2px 8px rgba(0,0,0,0.6); }
+  .hero h1 { font-family: var(--font-display); font-size: clamp(2.8rem, 7vw, 5.5rem); font-weight: 700; color: var(--ivory); text-shadow: 0 10px 40px rgba(0,0,0,0.8); margin-bottom: 20px; line-height: 1.3; }
+  .hero h1 span { color: var(--saffron-bright); }
+  .hero p { max-width: 650px; margin: 0 auto 38px; font-size: clamp(1.1rem, 2.5vw, 1.4rem); color: var(--ivory-dim); text-shadow: 0 2px 10px rgba(0,0,0,0.6); }
+  .hero-ctas { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
+
+  .btn { display: inline-block; padding: 16px 40px; border-radius: 6px; font-family: 'Poppins', sans-serif; font-size: 1rem; font-weight: 600; cursor: pointer; border: none; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); }
+  .btn-primary { background: var(--deggi); color: var(--ivory); box-shadow: 0 8px 30px rgba(217,43,43,0.4); }
+  .btn-primary:hover { transform: translateY(-4px); background: var(--deggi-dark); box-shadow: 0 12px 35px rgba(217,43,43,0.55); }
+  .btn-ghost { background: transparent; color: var(--saffron-bright); border: 2px solid var(--saffron); }
+  .btn-ghost:hover { background: rgba(241,168,41,0.15); transform: translateY(-4px); box-shadow: 0 8px 25px rgba(241,168,41,0.25); }
+
+  /* Steam Effect */
+  .steam { position: absolute; z-index: 2; bottom: 12%; pointer-events: none; width: 100%; height: 350px; left: 0; opacity: 0.35; }
+  .steam span { position: absolute; bottom: 0; width: 40px; height: 40px; border-radius: 50%; background: rgba(253,249,240,0.4); filter: blur(20px); animation: rise 6s ease-in infinite; }
+  .steam span:nth-child(1) { left: 20%; animation-delay: 0s; }
+  .steam span:nth-child(2) { left: 50%; animation-delay: 1.8s; width: 60px; height: 60px; }
+  .steam span:nth-child(3) { left: 80%; animation-delay: 3.5s; }
+  .steam span:nth-child(4) { left: 35%; animation-delay: 4.8s; width: 45px; height: 45px; }
+  @keyframes rise { 0% { transform: translateY(0) scale(0.4); opacity: 0; } 15% { opacity: 0.7; } 100% { transform: translateY(-320px) scale(2); opacity: 0; } }
+
+  .dots { position: absolute; z-index: 3; bottom: 35px; left: 50%; transform: translateX(-50%); display: flex; gap: 12px; }
+  .dots button { width: 11px; height: 11px; border-radius: 50%; background: rgba(253,249,240,0.3); border: none; cursor: pointer; transition: .3s; }
+  .dots button.active { background: var(--saffron-bright); width: 28px; border-radius: 6px; }
+
+  /* ---------- Sections ---------- */
+  section { position: relative; z-index: 1; padding: 100px 6%; }
+  .section-head { text-align: center; max-width: 700px; margin: 0 auto 70px; }
+  .eyebrow { color: var(--saffron); font-family: 'Poppins', sans-serif; letter-spacing: 3px; font-size: 0.85rem; text-transform: uppercase; margin-bottom: 12px; font-weight: 600; }
+  .section-head h2 { font-family: var(--font-display); font-size: clamp(2.2rem, 4vw, 3.2rem); color: var(--ivory); font-weight: 700; line-height: 1.4; }
+  .section-head p { color: var(--ivory-dim); margin-top: 18px; font-size: 1.15rem; }
+
+  .seal-divider { display: flex; align-items: center; justify-content: center; gap: 16px; margin: 18px auto 0; }
+  .seal-divider::before, .seal-divider::after { content: ""; height: 1px; width: 100px; background: var(--line); }
+  .seal-divider .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--saffron); box-shadow: 0 0 10px var(--saffron); }
+
+  /* ---------- Menu Grid Layout ---------- */
+  .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 35px; max-width: 1300px; margin: 0 auto; }
+  .dish-card { 
+    background: linear-gradient(180deg, var(--card-maroon), #160a05); 
+    border: 1px solid var(--line); 
+    border-radius: 12px; 
+    overflow: hidden; 
+    display: flex; 
+    flex-direction: column; 
+    transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), border-color 0.4s;
+    position: relative;
+  }
+  .dish-card:hover { 
+    transform: translateY(-12px) scale(1.02);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.65), 0 0 30px var(--glow-shadow);
+    border-color: var(--saffron);
+  }
+  
+  .dish-img { position: relative; height: 240px; overflow: hidden; background: #1a0c06; }
+  .dish-img img { transition: transform 0.7s cubic-bezier(0.165, 0.84, 0.44, 1); }
+  .dish-card:hover .dish-img img { transform: scale(1.1); }
+  
+  .dish-tag { position: absolute; top: 16px; inset-inline-end: 16px; background: rgba(12,8,4,0.9); border: 1px solid var(--saffron); color: var(--saffron-bright); font-size: 0.8rem; padding: 4px 14px; border-radius: 20px; font-weight: 500; box-shadow: 0 2px 8px rgba(0,0,0,0.5); }
+  .dish-body { padding: 28px 26px; display: flex; flex-direction: column; gap: 14px; flex: 1; }
+  .dish-body h3 { font-family: var(--font-display); font-size: 1.55rem; color: var(--ivory); font-weight: 700; transition: color 0.3s; }
+  .dish-card:hover .dish-body h3 { color: var(--saffron-bright); }
+  .dish-body .desc { color: var(--ivory-dim); font-size: 1.05rem; line-height: 1.9; }
+  html.lang-en .dish-body .desc { line-height: 1.65; }
+  
+  .price-row { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 16px; border-top: 1px dashed var(--line); }
+  .price-row .from { color: var(--ivory-dim); font-size: 0.9rem; }
+  .price-row .amount { color: var(--saffron-bright); font-size: 1.5rem; font-weight: 700; }
+  
+  .order-btn { margin-top: 16px; width: 100%; padding: 15px; border: none; border-radius: 6px; background: var(--deggi); color: var(--ivory); font-family: var(--font-display); font-size: 1.2rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(217,43,43,0.2); }
+  .order-btn:hover { background: var(--deggi-dark); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(217,43,43,0.4); }
+
+  /* ---------- Sides & Add-ons Grid ---------- */
+  .sides-wrap { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 30px; }
+  .side-card { 
+    background: var(--card-maroon); 
+    border: 1px solid var(--line); 
+    border-radius: 12px; 
+    overflow: hidden; 
+    display: flex; 
+    flex-direction: column; 
+    text-align: center; 
+    transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), border-color 0.4s;
+  }
+  .side-card:hover { 
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 25px var(--glow-shadow);
+    border-color: var(--saffron);
+  }
+  .side-img-box { height: 190px; background: #1a0c06; overflow: hidden; position: relative; }
+  .side-img-box img { transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1); }
+  .side-card:hover .side-img-box img { transform: scale(1.1); }
+  .side-info-box { padding: 22px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+  .side-card h4 { font-family: var(--font-display); color: var(--ivory); font-size: 1.25rem; transition: color 0.3s; }
+  .side-card:hover .side-info-box h4 { color: var(--saffron-bright); }
+  .side-card .amount { color: var(--saffron-bright); font-weight: 700; margin-top: auto; font-size: 1.2rem; }
+
+  /* ---------- About Section ---------- */
+  .about { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; max-width: 1200px; margin: 0 auto; }
+  .about .about-img { border-radius: 12px; box-shadow: 0 25px 55px rgba(0,0,0,0.6); overflow: hidden; height: 400px; background: #1a0c06; border: 1px solid var(--line); }
+  .about h2 { font-family: var(--font-display); font-size: 2.5rem; color: var(--ivory); margin-bottom: 22px; font-weight: 700; }
+  .about p { color: var(--ivory-dim); margin-bottom: 18px; font-size: 1.15rem; line-height: 2.1; }
+  @media(max-width:900px){ .about { grid-template-columns: 1fr; gap: 40px; } }
+
+  /* ---------- Footer ---------- */
+  footer { padding: 80px 6% 40px; text-align: center; border-top: 1px solid var(--line); background: var(--ink-black-2); position: relative; }
+  footer .brand { justify-content: center; margin-bottom: 25px; }
+  footer p { color: var(--ivory-dim); margin-bottom: 10px; font-size: 1.1rem; }
+  footer .foot-links { margin-top: 26px; display: flex; gap: 28px; justify-content: center; font-size: 0.95rem; }
+  footer .foot-links a:hover { color: var(--saffron-bright); text-decoration: underline; }
+  footer .credit { margin-top: 45px; color: #857359; font-size: 0.85rem; letter-spacing: 0.5px; }
+
+  /* WhatsApp FAB Button */
+  .wa-fab { position: fixed; bottom: 35px; left: 35px; z-index: 60; background: #25D366; color: #fff; width: 65px; height: 65px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; box-shadow: 0 10px 35px rgba(37,211,102,0.4); cursor: pointer; border: none; animation: pulse 2.4s infinite; transition: transform 0.3s; }
+  .wa-fab:hover { transform: scale(1.1); }
+  @keyframes pulse { 0%,100% { box-shadow: 0 10px 30px rgba(37,211,102,0.3); } 50% { box-shadow: 0 10px 40px rgba(37,211,102,0.65); transform: translateY(-6px); } }
+
+  /* ---------- Modern Modal Overlay ---------- */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 100; padding: 20px; opacity: 0; transition: opacity 0.3s ease; }
+  .modal-overlay.open { display: flex; opacity: 1; }
+  .modal { background: linear-gradient(180deg, #2d1810, #140804); border: 1px solid var(--saffron); border-radius: 14px; max-width: 520px; width: 100%; max-height: 90vh; overflow-y: auto; padding: 35px; position: relative; box-shadow: 0 30px 60px rgba(0,0,0,0.8), 0 0 40px rgba(241,168,41,0.25); transform: scale(0.9); transition: transform 0.3s ease; }
+  .modal-overlay.open .modal { transform: scale(1); }
+  .modal-close { position: absolute; top: 18px; inset-inline-start: 18px; background: rgba(0,0,0,0.4); border: none; color: var(--ivory-dim); width: 34px; height: 34px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s; z-index: 10; }
+  .modal-close:hover { background: var(--deggi); color: var(--ivory); }
+  .modal h3 { font-family: var(--font-display); color: var(--saffron-bright); font-size: 1.75rem; margin-bottom: 6px; text-shadow: 0 2px 8px rgba(0,0,0,0.4); }
+  .modal .modal-dish-img { width: 100%; height: 190px; object-fit: cover; border-radius: 8px; margin: 18px 0; background: #1a0c06; border: 1px solid var(--line); }
+  
+  .field-label { display: block; color: var(--saffron-bright); font-size: 1rem; margin: 20px 0 8px; font-weight: bold; }
+  .plate-toggle { display: flex; gap: 14px; }
+  .plate-toggle label { flex: 1; border: 1px solid var(--line); border-radius: 8px; padding: 14px; text-align: center; cursor: pointer; font-size: 1rem; color: var(--ivory-dim); transition: .2s; background: rgba(0,0,0,0.25); position: relative; display: block; }
+  .plate-toggle input { display: none; }
+  .plate-toggle label span { display: block; width: 100%; height: 100%; }
+  .plate-toggle input:checked + span { color: var(--saffron-bright); font-weight: 700; }
+  .plate-toggle label:has(input:checked) { border-color: var(--saffron); background: rgba(241,168,41,0.14); box-shadow: 0 0 12px rgba(241,168,41,0.15); }
+  
+  .extras-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .extras-grid label { display: flex; align-items: center; gap: 10px; font-size: 1rem; color: var(--ivory-dim); cursor: pointer; }
+  .extras-grid input { accent-color: var(--deggi); width: 19px; height: 19px; cursor: pointer; }
+  
+  .qty-row { display: flex; align-items: center; gap: 18px; }
+  .qty-btn { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--saffron); background: transparent; color: var(--ivory); font-size: 1.4rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+  .qty-btn:hover { background: var(--saffron); color: var(--ink-black); }
+  .qty-num { font-size: 1.3rem; min-width: 30px; text-align: center; font-weight: 700; }
+  
+  .modal input[type=text], .modal input[type=tel], .modal textarea { width: 100%; background: rgba(0,0,0,0.35); border: 1px solid var(--line); border-radius: 8px; padding: 14px; color: var(--ivory); font-family: var(--font-body); font-size: 1.05rem; outline: none; transition: border-color 0.3s; }
+  .modal input:focus, .modal textarea:focus { border-color: var(--saffron); background: rgba(0,0,0,0.5); box-shadow: 0 0 10px rgba(241,168,41,0.1); }
+  .modal textarea { resize: vertical; min-height: 80px; }
+  
+  .total-row { display: flex; justify-content: space-between; align-items: center; margin: 30px 0 10px; padding-top: 18px; border-top: 1px dashed var(--line); }
+  .total-row .label { color: var(--ivory-dim); font-size: 1.1rem; }
+  .total-row .val { color: var(--saffron-bright); font-size: 1.75rem; font-weight: 700; text-shadow: 0 0 12px rgba(241,168,41,0.35); }
+  
+  .submit-btn { width: 100%; padding: 16px; margin-top: 24px; border: none; border-radius: 8px; background: #25D366; color: #fff; font-weight: 700; font-family: var(--font-display); font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 12px; box-shadow: 0 6px 20px rgba(37,211,102,0.3); transition: all 0.3s ease; }
+  .submit-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(37,211,102,0.5); }
+  .form-error { color: #ff6b6b; font-size: 0.95rem; margin-top: 10px; display: none; font-weight: bold; }
+
+  @media(max-width:768px){
+    section { padding: 70px 5%; }
+    .hero-ctas { flex-direction: column; align-items: center; width: 100%; }
+    .hero-ctas .btn { width: 100%; max-width: 320px; text-align: center; }
+    nav { display: none; }
+    .header-right { gap: 18px; }
+    .extras-grid { grid-template-columns: 1fr; gap: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<header id="siteHeader">
+  <div class="brand" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+    <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <circle cx="32" cy="32" r="30" stroke="#f1a829" stroke-width="2"/>
+      <path d="M20 26c1.5-3 3-5 3-8" stroke="#ffc55a" stroke-width="2" stroke-linecap="round"/>
+      <path d="M32 24c1.5-3 3-5 3-8" stroke="#ffc55a" stroke-width="2" stroke-linecap="round"/>
+      <path d="M44 26c1.5-3 3-5 3-8" stroke="#ffc55a" stroke-width="2" stroke-linecap="round"/>
+      <path d="M16 30h32l-3 16c-0.5 2.5-2.5 4-5 4H24c-2.5 0-4.5-1.5-5-4l-3-16z" fill="#d92b2b" stroke="#f1a829" stroke-width="1.5"/>
+      <ellipse cx="32" cy="30" rx="16" ry="4" fill="#f1a829"/>
+      <rect x="27" y="18" width="10" height="4" rx="2" fill="#f1a829"/>
+    </svg>
+    <span class="brand-text" data-i18n="brand">عبید ریسٹورنٹ</span>
+  </div>
+  <div class="header-right">
+    <nav>
+      <a href="#menu" data-i18n="nav_menu">مینیو</a>
+      <a href="#sides" data-i18n="nav_sides">لوازمات</a>
+      <a href="#about" data-i18n="nav_about">تعارف</a>
+      <a href="#contact" data-i18n="nav_contact">رابطہ</a>
+    </nav>
+    <div class="lang-switch">
+      <button type="button" data-lang="ur" class="active">اردو</button>
+      <button type="button" data-lang="en">EN</button>
+    </div>
+  </div>
+</header>
+
+<div class="hero" id="hero">
+  <div class="hero-slide active">
+    <img src="https://images.unsplash.com/photo-1633945274405-b6c8069047b0?w=1600&q=80&auto=format&fit=crop&fm=jpg" alt="Premium Biryani">
+  </div>
+  <div class="hero-slide">
+    <img src="https://images.unsplash.com/photo-1559528896-c5310744cce8?w=1600&q=80&auto=format&fit=crop&fm=jpg" alt="Delicious Chicken Biryani">
+  </div>
+  <div class="hero-slide">
+    <img src="https://images.unsplash.com/photo-1545247181-516773cae754?w=1600&q=80&auto=format&fit=crop&fm=jpg" alt="Royal Mutton Biryani">
+  </div>
+
+  <div class="steam"><span></span><span></span><span></span><span></span></div>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow" data-i18n="hero_eyebrow">ایک بار کھائیے، بار بار آئیے!</div>
+    <h1><span data-i18n="hero_title1">اصل ذائقہ،</span> <span data-i18n="hero_title2">اصل بریانی</span></h1>
+    <p data-i18n="hero_desc">دم پر پکی ہوئی خالص بریانی، تازہ مصالحوں اور خوشبودار باسمتی چاول کے ساتھ — عبید ریسٹورنٹ کی پہچان۔</p>
+    <div class="hero-ctas">
+      <a href="#menu" class="btn btn-primary" data-i18n="cta_menu">مینیو دیکھیں</a>
+      <a href="#contact" class="btn btn-ghost" data-i18n="cta_contact">ہم سے رابطہ کریں</a>
+    </div>
+  </div>
+
+  <div class="dots" id="heroDots"></div>
+</div>
+
+<section id="menu">
+  <div class="section-head">
+    <div class="eyebrow" data-i18n="menu_eyebrow">ہمارا مینیو</div>
+    <h2 data-i18n="menu_title">دیگ کی خوشبو، ہر پلیٹ میں</h2>
+    <div class="seal-divider"><span class="dot"></span></div>
+  </div>
+  <div class="menu-grid" id="menuGrid"></div>
+</section>
+
+<section style="padding-top:20px;" id="sides">
+  <div class="section-head">
+    <div class="eyebrow" data-i18n="sides_eyebrow">لازمی لوازمات</div>
+    <h2 data-i18n="sides_title">رائتہ، سلاد اور ٹھنڈے و گرم مشروبات</h2>
+    <p data-i18n="sides_desc">کھانے کا لطف دوبالا کریں — بالکل تازہ اور لاجواب ورائٹی۔</p>
+  </div>
+  <div class="sides-wrap" id="sidesGrid"></div>
+</section>
+
+<section id="about">
+  <div class="about">
+    <div class="about-img">
+      <img src="https://images.unsplash.com/photo-1716550781939-beb7d7247aae?w=900&q=80&auto=format&fit=crop&fm=jpg" alt="Traditional Biryani Making">
+    </div>
+    <div>
+      <div class="eyebrow" data-i18n="about_eyebrow">ہماری کہانی</div>
+      <h2 data-i18n="about_title">ہر دیگ ایک روایت ہے</h2>
+      <p data-i18n="about_p1">عبید ریسٹورنٹ میں ہم برسوں پرانے خاندانی نسخے کے مطابق بریانی دم پر پکاتے ہیں — سست آنچ، خالص گھی اور محتاط انتخاب کیے گئے مصالحے۔</p>
+      <p data-i18n="about_p2">ہر پلیٹ تازہ تیار کی جاتی ہے، تاکہ خوشبو اور ذائقہ بالکل ویسا ہی رہے جیسا دیگ کھلتے ہی محسوس ہوتا ہے۔</p>
+    </div>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="brand" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+    <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="width:34px;height:34px;">
+      <circle cx="32" cy="32" r="30" stroke="#f1a829" stroke-width="2"/>
+      <path d="M20 26c1.5-3 3-5 3-8" stroke="#ffc55a" stroke-width="2" stroke-linecap="round"/>
+      <path d="M32 24c1.5-3 3-5 3-8" stroke="#ffc55a" stroke-width="2" stroke-linecap="round"/>
+      <path d="M44 26c1.5-3 3-5 3-8" stroke="#ffc55a" stroke-width="2" stroke-linecap="round"/>
+      <path d="M16 30h32l-3 16c-0.5 2.5-2.5 4-5 4H24c-2.5 0-4.5-1.5-5-4l-3-16z" fill="#d92b2b" stroke="#f1a829" stroke-width="1.5"/>
+      <ellipse cx="32" cy="30" rx="16" ry="4" fill="#f1a829"/>
+      <rect x="27" y="18" width="10" height="4" rx="2" fill="#f1a829"/>
+    </svg>
+    <span class="brand-text" data-i18n="brand">عبید ریسٹورنٹ</span>
+  </div>
+  <p><span data-i18n="footer_whatsapp_label">واٹس ایپ پر آرڈر کریں:</span> <span class="num" dir="ltr">+92 343 4700693</span></p>
+  <p style="color:var(--saffron-bright); font-weight:bold; font-size: 1.15rem;"><span data-i18n="easypaisa_label">ایزی پیسہ اکاؤنٹ:</span> <span class="num" dir="ltr">0343-4700693</span></p>
+  <p data-i18n="footer_hours">کھلنے کا وقت: روزانہ دوپہر ١٢ بجے سے رات ١١ بجے تک</p>
+  <div class="foot-links">
+    <a href="https://wa.me/923434700693" target="_blank" rel="noopener" data-i18n="footer_link_whatsapp">واٹس ایپ</a>
+    <a href="#menu" data-i18n="footer_link_menu">مینیو</a>
+    <a href="#sides" data-i18n="nav_sides">لوازمات</a>
+    <a href="#about" data-i18n="footer_link_about">تعارف</a>
+  </div>
+  <div class="credit" data-i18n="footer_credit">© عبید ریسٹورنٹ — تمام حقوق محفوظ ہیں</div>
+</footer>
+
+<button class="wa-fab" id="waFab" aria-label="WhatsApp" title="WhatsApp">💬</button>
+
+<!-- Dynamic Ordering Modal System -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <button class="modal-close" id="modalClose" aria-label="Close">✕</button>
+    <h3 id="modalDishName">—</h3>
+    <img class="modal-dish-img" id="modalDishImg" src="" alt="">
+
+    <span class="field-label" data-i18n="modal_select_plate">پلیٹ منتخب کریں</span>
+    <div class="plate-toggle">
+      <label>
+        <input type="radio" name="plate" value="single" checked>
+        <span id="singleLabel">—</span>
+      </label>
+      <label>
+        <input type="radio" name="plate" value="double">
+        <span id="doubleLabel">—</span>
+      </label>
+    </div>
+
+    <span class="field-label" data-i18n="modal_extras">اضافی چیزیں (لوازمات)</span>
+    <div class="extras-grid" id="modalExtrasContainer"></div>
+
+    <span class="field-label" data-i18n="modal_qty">مقدار</span>
+    <div class="qty-row">
+      <button class="qty-btn" id="qtyMinus" type="button">−</button>
+      <span class="qty-num" id="qtyNum">1</span>
+      <button class="qty-btn" id="qtyPlus" type="button">+</button>
+    </div>
+
+    <span class="field-label" data-i18n="modal_name">آپ کا نام</span>
+    <input type="text" id="custName" placeholder="اپنا نام لکھیں">
+
+    <span class="field-label" data-i18n="modal_address">مکمل پتہ</span>
+    <textarea id="custAddress" placeholder="گھر نمبر، گلی، علاقہ، شہر"></textarea>
+
+    <span class="field-label" data-i18n="modal_phone">فون نمبر</span>
+    <input type="tel" id="custPhone" dir="ltr" placeholder="03xx-xxxxxxx">
+
+    <div class="form-error" id="formError" data-i18n="modal_error">براہ کرم نام، پتہ اور فون نمبر درج کریں۔</div>
+
+    <div class="total-row">
+      <span class="label" data-i18n="modal_total">مجموعی رقم</span>
+      <span class="val" id="totalAmount">Rs. 0</span>
+    </div>
+
+    <button class="submit-btn" id="sendOrderBtn" type="button">💬 <span data-i18n="modal_submit">واٹس ایپ پر آرڈر بھیجیں</span></button>
+  </div>
+</div>
+
+<script>
+  const WHATSAPP_NUMBER = "923434700693";
+  const EASYPAISA_NUMBER = "0343-4700693";
+
+  let currentLang = 'ur';
+  let selectedDish = null;
+  let currentQty = 1;
+
+  const translations = {
+    ur: {
+      brand: 'عبید ریسٹورنٹ', nav_menu: 'مینیو', nav_sides: 'لوازمات', nav_about: 'تعارف', nav_contact: 'رابطہ',
+      hero_eyebrow: 'ایک بار کھائیے، بار بار آئیے!',
+      hero_title1: 'اصل ذائقہ،', hero_title2: 'اصل بریانی',
+      hero_desc: 'دم پر پکی ہوئی خالص بریانی، تازہ مصالحوں اور خوشبودار باسمتی چاول کے ساتھ — عبید ریسٹورنٹ کی پہچان۔',
+      cta_menu: 'مینیو دیکھیں', cta_contact: 'ہم سے رابطہ کریں',
+      menu_eyebrow: 'ہمارا مینیو', menu_title: 'دیگ کی خوشبو، ہر پلیٹ میں',
+      sides_eyebrow: 'لازمی لوازمات', sides_title: 'رائتہ، سلاد اور مشروبات',
+      sides_desc: 'کھانے کا لطف دوبالا کریں — بالکل تازہ اور لاجواب ورائٹی۔',
+      about_eyebrow: 'ہماری کہانی', about_title: 'ہر دیگ ایک روایت ہے',
+      about_p1: 'عبید ریسٹورنٹ میں ہم برسوں پرانے خاندانی نسخے کے مطابق بریانی دم پر پکاتے ہیں — سست آنچ، خالص گھی اور محتاط انتخاب کیے گئے مصالحے۔',
+      about_p2: 'ہر پلیٹ تازہ تیار کی جاتی ہے، تاکہ خوشبو اور ذائقہ بالکل ویسا ہی رہے جیسا دیگ کھلتے ہی محسوس ہوتا ہے۔',
+      footer_whatsapp_label: 'واٹس ایپ پر آرڈر کریں:', easypaisa_label: 'ایزی پیسہ اکاؤنٹ:',
+      footer_hours: 'کھلنے کا وقت: روزانہ دوپہر ١٢ بجے سے رات ١١ بجے تک',
+      footer_link_whatsapp: 'واٹس ایپ', footer_link_menu: 'مینیو', footer_link_about: 'تعارف',
+      footer_credit: '© عبید ریسٹورنٹ — تمام حقوق محفوظ ہیں',
+      price_from: 'قیمت شروع', order_btn: 'آرڈر کریں',
+      modal_select_plate: 'پلیٹ منتخب کریں', modal_single: 'سنگل پلیٹ', modal_double: 'ڈبل پلیٹ',
+      modal_extras: 'اضافی چیزیں', modal_qty: 'مقدار',
+      modal_name: 'آپ کا نام', modal_address: 'مکمل پتہ', modal_phone: 'فون نمبر',
+      modal_error: 'براہ کرم نام، پتہ اور فون نمبر درج کریں۔',
+      modal_total: 'مجموعی رقم', modal_submit: 'واٹس ایپ پر آرڈر بھیجیں'
+    },
+    en: {
+      brand: 'Obaid Restaurant', nav_menu: 'Menu', nav_sides: 'Sides', nav_about: 'About', nav_contact: 'Contact',
+      hero_eyebrow: 'Taste it once, you will come again and again!',
+      hero_title1: 'Real Flavour,', hero_title2: 'Real Biryani',
+      hero_desc: 'Slow-cooked dum biryani made with fresh spices and fragrant basmati rice — the signature of Obaid Restaurant.',
+      cta_menu: 'View Menu', cta_contact: 'Contact Us',
+      menu_eyebrow: 'OUR MENU', menu_title: 'The aroma of the pot, in every plate',
+      sides_eyebrow: 'ADD ONS', sides_title: 'Raita, Salad & Drinks',
+      sides_desc: 'Double the joy of your meal — fresh and wonderful variety.',
+      about_eyebrow: 'OUR STORY', about_title: 'Every pot is a tradition',
+      about_p1: 'At Obaid Restaurant, we cook biryani on dum following a decades-old family recipe — slow flame, pure ghee, and carefully chosen spices.',
+      about_p2: 'Every plate is prepared fresh, so the aroma and taste stay exactly as they should be the moment the pot is opened.',
+      footer_whatsapp_label: 'Order on WhatsApp:', easypaisa_label: 'EasyPaisa Account:',
+      footer_hours: 'Hours: Daily, 12 PM – 11 PM',
+      footer_link_whatsapp: 'WhatsApp', footer_link_menu: 'Menu', footer_link_about: 'About',
+      footer_credit: '© Obaid Restaurant — All rights reserved',
+      price_from: 'Starting at', order_btn: 'Order Now',
+      modal_select_plate: 'Select Plate', modal_single: 'Single Plate', modal_double: 'Double Plate',
+      modal_extras: 'Add-ons', modal_qty: 'Quantity',
+      modal_name: 'Your Name', modal_address: 'Full Address', modal_phone: 'Phone Number',
+      modal_error: 'Please enter your name, address and phone number.',
+      modal_total: 'Total Amount', modal_submit: 'Send Order on WhatsApp'
+    }
+  };
+
+  const dishes = [
+    { id: "chicken", single: 350, double: 650, img: "https://images.unsplash.com/photo-1559528896-c5310744cce8?w=800&q=80&auto=format&fit=crop", ur: { name: "چکن دم بریانی", desc: "مصالحہ دار چکن، خوشبودار باسمتی چاول اور خالص دیگی مصالحوں کا حسین امتزاج۔", tag: "سب سے پسندیدہ" }, en: { name: "Chicken Dum Biryani", desc: "Spiced chicken slow-cooked on dum with fragrant basmati rice.", tag: "Best Seller" } },
+    { id: "mutton", single: 600, double: 1100, img: "https://images.unsplash.com/photo-1545247181-516773cae754?w=800&q=80&auto=format&fit=crop", ur: { name: "مٹن دم بریانی", desc: "نہایت نرم مکھن جیسے مٹن اور زعفرانی باسمتی چاول کے ساتھ شاہی پکوان۔", tag: "خاص شاہی ورائٹی" }, en: { name: "Mutton Dum Biryani", desc: "Royal recipe featuring tender mutton melts and saffron-infused rice.", tag: "Premium Royal" } },
+    { id: "beef", single: 400, double: 750, img: "https://images.unsplash.com/photo-1633945274405-b6c8069047b0?w=800&q=80&auto=format&fit=crop", ur: { name: "بیف دیگی بریانی", desc: "روایتی لاہوری دیگی ذائقہ، رسیلے بیف اور چٹپٹے مصالحوں کے ساتھ۔", tag: "دیگی خاص" }, en: { name: "Beef Deggi Biryani", desc: "Traditional pot-cooked rich beef flavor with traditional bold spices.", tag: "House Special" } },
+    { id: "pulao", single: 380, double: 700, img: "https://images.unsplash.com/photo-1691171047462-66025ecd5efc?w=800&q=80&auto=format&fit=crop", ur: { name: "بیف یخنی پلاؤ", desc: "خالص یخنی میں تیار کردہ رسیلا بیف اور ہلکے متوازن خوشبودار مصالحے۔", tag: "کلاسک پلاؤ" }, en: { name: "Beef Yakhni Pulao", desc: "Juicy beef cooked in rich bone broth and delicate aromatic spices.", tag: "Classic" } }
+  ];
+
+  /* پاک صاف لوازمات کی لسٹ (مسنگ امیجز حذف کر دی گئی ہیں) */
+  const sides = [
+    { id: "raita", price: 50, img: "https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?w=500&q=80&auto=format&fit=crop", ur: { name: "خاص پودینہ رائتہ" }, en: { name: "Mint Raita" } },
+    { id: "russian", price: 150, img: "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=500&q=80&auto=format&fit=crop", ur: { name: "کریم رشین سلاد" }, en: { name: "Russian Salad" } },
+    { id: "kachumber", price: 50, img: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=500&q=80&auto=format&fit=crop", ur: { name: "تازه کچومر سلاد" }, en: { name: "Kachumber Salad" } },
+    { id: "shahi-chai", price: 130, img: "https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=500&q=80&auto=format&fit=crop", ur: { name: "شاہی ملائی چائے" }, en: { name: "Shahi Malai Chai" } },
+    { id: "gur-chai", price: 110, img: "https://images.unsplash.com/photo-1561336313-0bd5e0b27ec8?w=500&q=80&auto=format&fit=crop", ur: { name: "خالص گڑ والی چائے" }, en: { name: "Jaggery (Gur) Tea" } },
+    { id: "kadak-chai", price: 90, img: "https://images.unsplash.com/photo-1597481499750-3e6b22637e12?w=500&q=80&auto=format&fit=crop", ur: { name: "ہوم میڈ کڑک چائے" }, en: { name: "Kadak Milk Tea" } },
+    { id: "coke", price: 120, img: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=500&q=80&auto=format&fit=crop", ur: { name: "کوکاکولا کین" }, en: { name: "Coca Cola Can" } }
+  ];
+
+  /* Render Interface Functions */
+  function renderDishes() {
+    const grid = document.getElementById('menuGrid');
+    grid.innerHTML = dishes.map(dish => {
+      const data = dish[currentLang];
+      const t = translations[currentLang];
+      return `
+        <div class="dish-card">
+          <div class="dish-img">
+            <img src="${dish.img}" alt="${data.name}" loading="lazy">
+            <span class="dish-tag">${data.tag}</span>
+          </div>
+          <div class="dish-body">
+            <h3>${data.name}</h3>
+            <p class="desc">${data.desc}</p>
+            <div class="price-row">
+              <span class="from">${t.price_from}</span>
+              <span class="amount">Rs. ${dish.single}</span>
+            </div>
+            <button class="order-btn" onclick="openOrderModal('${dish.id}')">${t.order_btn}</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function renderSides() {
+    const grid = document.getElementById('sidesGrid');
+    grid.innerHTML = sides.map(side => {
+      const data = side[currentLang];
+      return `
+        <div class="side-card">
+          <div class="side-img-box">
+            <img src="${side.img}" alt="${data.name}" loading="lazy">
+          </div>
+          <div class="side-info-box">
+            <h4>${data.name}</h4>
+            <div class="amount">Rs. ${side.price}</div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function openOrderModal(dishId) {
+    selectedDish = dishes.find(d => d.id === dishId);
+    if (!selectedDish) return;
+
+    currentQty = 1;
+    document.getElementById('qtyNum').innerText = currentQty;
+    document.getElementById('modalDishName').innerText = selectedDish[currentLang].name;
+    document.getElementById('modalDishImg').src = selectedDish.img;
+
+    const t = translations[currentLang];
+    document.getElementById('singleLabel').innerText = `${t.modal_single} (Rs. ${selectedDish.single})`;
+    document.getElementById('doubleLabel').innerText = `${t.modal_double} (Rs. ${selectedDish.double})`;
+
+    const extrasContainer = document.getElementById('modalExtrasContainer');
+    extrasContainer.innerHTML = sides.map(s => `
+      <label>
+        <input type="checkbox" class="extra-checkbox" value="${s.price}" data-name="${s[currentLang].name}">
+        <span>${s[currentLang].name} (+Rs. ${s.price})</span>
+      </label>
+    `).join('');
+
+    document.querySelectorAll('.extra-checkbox, input[name="plate"]').forEach(input => {
+      input.addEventListener('change', calculateTotal);
+    });
+
+    calculateTotal();
+    document.getElementById('formError').style.display = 'none';
+    const overlay = document.getElementById('modalOverlay');
+    overlay.classList.add('open');
+  }
+
+  function calculateTotal() {
+    if (!selectedDish) return;
+    const plateType = document.querySelector('input[name="plate"]:checked').value;
+    let basePrice = plateType === 'single' ? selectedDish.single : selectedDish.double;
+
+    let extrasTotal = 0;
+    document.querySelectorAll('.extra-checkbox:checked').forEach(cb => {
+      extrasTotal += parseInt(cb.value);
+    });
+
+    const total = (basePrice + extrasTotal) * currentQty;
+    document.getElementById('totalAmount').innerText = `Rs. ${total}`;
+  }
+
+  /* Modal Event Listeners */
+  document.getElementById('modalClose').onclick = () => {
+    document.getElementById('modalOverlay').classList.remove('open');
+  };
+
+  document.getElementById('qtyPlus').onclick = () => {
+    currentQty++;
+    document.getElementById('qtyNum').innerText = currentQty;
+    calculateTotal();
+  };
+
+  document.getElementById('qtyMinus').onclick = () => {
+    if (currentQty > 1) {
+      currentQty--;
+      document.getElementById('qtyNum').innerText = currentQty;
+      calculateTotal();
+    }
+  };
+
+  document.getElementById('sendOrderBtn').onclick = () => {
+    const name = document.getElementById('custName').value.trim();
+    const address = document.getElementById('custAddress').value.trim();
+    const phone = document.getElementById('custPhone').value.trim();
+
+    if (!name || !address || !phone) {
+      document.getElementById('formError').style.display = 'block';
+      return;
+    }
+
+    const plateType = document.querySelector('input[name="plate"]:checked').value;
+    const plateLabel = plateType === 'single' ? 'سنگل پلیٹ' : 'ڈبل پلیٹ';
+    
+    let selectedExtras = [];
+    document.querySelectorAll('.extra-checkbox:checked').forEach(cb => {
+      selectedExtras.push(cb.getAttribute('data-name'));
+    });
+
+    const totalText = document.getElementById('totalAmount').innerText;
+
+    let msg = `*نیا آرڈر - عبید ریسٹورنٹ*\n\n`;
+    msg += `*آئٹم:* ${selectedDish[currentLang].name}\n`;
+    msg += `*سائز:* ${plateLabel}\n`;
+    if (selectedExtras.length > 0) {
+      msg += `*لوازمات:* ${selectedExtras.join(', ')}\n`;
+    }
+    msg += `*مقدار:* ${currentQty}\n`;
+    msg += `*کل رقم:* ${totalText}\n\n`;
+    msg += `*گاہک کی تفصیلات:*\n`;
+    msg += `*نام:* ${name}\n`;
+    msg += `*فون:* ${phone}\n`;
+    msg += `*پتہ:* ${address}`;
+
+    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+    window.open(url, '_blank');
+  };
+
+  /* Language Switcher */
+  document.querySelectorAll('.lang-switch button').forEach(btn => {
+    btn.onclick = () => {
+      const lang = btn.getAttribute('data-lang');
+      if (lang === currentLang) return;
+      currentLang = lang;
+
+      document.querySelectorAll('.lang-switch button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const html = document.documentElement;
+      html.className = `lang-${lang}`;
+      html.dir = lang === 'ur' ? 'rtl' : 'ltr';
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (translations[lang][key]) {
+          el.innerText = translations[lang][key];
+        }
+      });
+
+      renderDishes();
+      renderSides();
+    };
+  });
+
+  /* Hero Slider & Header Scroll */
+  let currentSlide = 0;
+  const slides = document.querySelectorAll('.hero-slide');
+  const dotsContainer = document.getElementById('heroDots');
+
+  slides.forEach((_, i) => {
+    const dot = document.createElement('button');
+    if (i === 0) dot.classList.add('active');
+    dot.onclick = () => setSlide(i);
+    dotsContainer.appendChild(dot);
+  });
+
+  function setSlide(i) {
+    slides[currentSlide].classList.remove('active');
+    dotsContainer.children[currentSlide].classList.remove('active');
+    currentSlide = i;
+    slides[currentSlide].classList.add('active');
+    dotsContainer.children[currentSlide].classList.add('active');
+  }
+
+  setInterval(() => {
+    setSlide((currentSlide + 1) % slides.length);
+  }, 5000);
+
+  window.onscroll = () => {
+    const header = document.getElementById('siteHeader');
+    if (window.scrollY > 50) header.classList.add('scrolled');
+    else header.classList.remove('scrolled');
+  };
+
+  document.getElementById('waFab').onclick = () => {
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}`, '_blank');
+  };
+
+  // Initial Load
+  renderDishes();
+  renderSides();
+</script>
+</body>
+</html>
